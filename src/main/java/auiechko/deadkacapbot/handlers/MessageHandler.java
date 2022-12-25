@@ -27,7 +27,7 @@ public class MessageHandler implements Handler<Message>{
             SendMessage msl = new SendMessage();
             msl.setChatId(message.getChatId());
             if(text.equals("/shot") || text.equals("/shot@dead_kacap_counter_bot")) {
-                if (message.getDate() - Database.getLastUse(message) >= 3600) {
+                if (message.getDate() - Database.getLastUse(message) >= 120) {
                     long a = (long) (Math.random() * 91) + 10;
                     String word = "кацапів";
                     if (a % 10 == 1 && a != 11) { word = "кацапа"; }
@@ -38,12 +38,12 @@ public class MessageHandler implements Handler<Message>{
                     Database.setShots(message, newShots);
                     msl.setText("Постріл! \nБавовни багато завдяки " + Database.getNickname(message) + ". \nТи йобнув " + a + " " + word + "!");
                 } else {
-                    long time = Database.getLastUse(message) + 3600 - message.getDate();
+                    long time = Database.getLastUse(message) + 120 - message.getDate();
                     long minutes = time / 60;
                     long seconds = time % 60;
                     msl.setText("Відпочинь, треба перезарядити хаймарс. \nСтріляй через " + minutes + "хв. " + seconds + "c.");
                 }
-            } else if (text.equals("/myrank")  || text.equals("/myrank@dead_kacap_counter_bot")) {
+            } else if (text.equals("/myrank")  || text.equals("/myrank@dead_kacap_counter_bot") || text.equals("/profile") || text.equals("/profile@dead_kacap_counter_bot")) {
                 String word = "кацапів";
                 long kills = Database.getKills(message);
                 long shots = Database.getShots(message);
