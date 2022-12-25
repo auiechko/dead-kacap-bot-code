@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.FileReader;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -18,10 +19,10 @@ public class Database {
 
     public static void addUser(Message message) {
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
@@ -31,6 +32,7 @@ public class Database {
             userInfoJSON.put("lastUse",0);
             userInfoJSON.put("boxes",0);
             userInfoJSON.put("nickname",message.getFrom().getFirstName());
+            userInfoJSON.put("explicit",false);
             usersJSON.put(message.getFrom().getId().toString(),userInfoJSON);
             FileWriter writeFile = new FileWriter(src);
             writeFile.write(usersJSON.toString());
@@ -42,10 +44,10 @@ public class Database {
 
     public static long getBoxes(Message message) {
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
@@ -59,10 +61,10 @@ public class Database {
 
     public static long getKills(Message message) {
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
@@ -76,10 +78,10 @@ public class Database {
 
     public static long getLastUse(Message message) {
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
@@ -93,10 +95,10 @@ public class Database {
 
     public static long getShots(Message message) {
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
@@ -110,10 +112,10 @@ public class Database {
 
     public static void setBoxes(Message message, long newValue) {
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
@@ -133,10 +135,10 @@ public class Database {
 
     public static void setLastUse(Message message, long newValue) {
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
@@ -156,10 +158,10 @@ public class Database {
 
     public static void setShots(Message message, long newValue) {
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
@@ -179,10 +181,10 @@ public class Database {
 
     public static void setKills(Message message, long newValue) {
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
@@ -202,10 +204,10 @@ public class Database {
 
     public static boolean findUser(Message message) {
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
@@ -219,16 +221,16 @@ public class Database {
     public static String[] getTop(Message message) {
         String[] top = new String[10];
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
             for (int i = 0; i < top.length; i++) {
                 long currentKillsLoop = -1;
-                for (Iterator key = usersJSON.keys(); key.hasNext();) {
+                for (Iterator<String> key = usersJSON.keys(); key.hasNext();) {
                     String id = String.valueOf(key.next());
                     JSONObject name = (JSONObject) usersJSON.get(id);
                     if(name.getLong("kills") > currentKillsLoop) {
@@ -237,7 +239,7 @@ public class Database {
                     }
                 }
                 JSONObject user = (JSONObject) usersJSON.get(top[i]);
-                user.put("kills",-1l);
+                user.put("kills",-1L);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -247,13 +249,12 @@ public class Database {
 
     public static long getKillsByID(String userId) {
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
-            System.out.println(JSONtext);
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
             JSONObject infoJSON = usersJSON.getJSONObject(userId);
             return infoJSON.getLong("kills");
@@ -266,10 +267,10 @@ public class Database {
     public static String getNicknameByID(String userId) {
         String nick = "Ім'я невідоме";
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
@@ -284,12 +285,11 @@ public class Database {
     public static String getNickname(Message message) {
         String nick = "Ім'я невідоме";
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
                 String scannedText = scannerJSON.nextLine();
-                JSONtext += scannedText;
-                System.out.println(scannedText);
+                JSONtext.append(scannedText);
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
@@ -303,10 +303,10 @@ public class Database {
 
     public static void setNewNickname(Message message, String resNick) {
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile,"windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
@@ -325,10 +325,10 @@ public class Database {
     public static String[] getTopChat(Message message) {
         String[] top = new String[10];
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
@@ -344,7 +344,7 @@ public class Database {
                     }
                 }
                 JSONObject user = (JSONObject) usersJSON.get(top[i]);
-                user.put("kills",-1l);
+                user.put("kills",-1L);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -362,18 +362,35 @@ public class Database {
     }
 
     public static void printData() {
-
         try {
-            String JSONtext = "";
-            Scanner scannerJSON = new Scanner(userJsonFile, "windows-1251");
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
             while(scannerJSON.hasNextLine()) {
-                JSONtext += scannerJSON.nextLine();
+                JSONtext.append(scannerJSON.nextLine());
             }
             scannerJSON.close();
-            System.out.println(JSONtext);
+            System.out.println(JSONtext.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
 
+    public static void changeExplicit(Message message) {
+        try {
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
+            while(scannerJSON.hasNextLine()) {
+                JSONtext.append(scannerJSON.nextLine());
+            }
+            scannerJSON.close();
+            JSONObject usersJSON = new JSONObject(JSONtext.toString());
+            JSONObject user = (JSONObject) usersJSON.get(String.valueOf(message.getFrom().getId()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean getExplicit(Message message) {
+        return true;
     }
 }
