@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import auiechko.deadkacapbot.chatmembergetter.ChatMemberGetter;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -14,10 +16,15 @@ import java.util.Scanner;
 
 @Component
 public class Database {
-    static String src = "json/users.json";
-    static File userJsonFile = new File(src);
+    final ChatMemberGetter chatMemberGetter;
+    String src = "json/users.json";
+    File userJsonFile = new File(src);
 
-    public static void addUser(Message message) {
+    public Database(ChatMemberGetter chatMemberGetter) {
+        this.chatMemberGetter = chatMemberGetter;
+    }
+
+    public void addUser(Message message) {
         try {
             StringBuilder JSONtext = new StringBuilder();
             Scanner scannerJSON = new Scanner(new FileReader(src));
@@ -42,7 +49,7 @@ public class Database {
         }
     }
 
-    public static long getBoxes(Message message) {
+    public long getBoxes(Message message) {
         try {
             StringBuilder JSONtext = new StringBuilder();
             Scanner scannerJSON = new Scanner(new FileReader(src));
@@ -59,7 +66,7 @@ public class Database {
         }
     }
 
-    public static long getKills(Message message) {
+    public long getKills(Message message) {
         try {
             StringBuilder JSONtext = new StringBuilder();
             Scanner scannerJSON = new Scanner(new FileReader(src));
@@ -76,7 +83,7 @@ public class Database {
         }
     }
 
-    public static long getLastUse(Message message) {
+    public long getLastUse(Message message) {
         try {
             StringBuilder JSONtext = new StringBuilder();
             Scanner scannerJSON = new Scanner(new FileReader(src));
@@ -93,7 +100,7 @@ public class Database {
         }
     }
 
-    public static long getShots(Message message) {
+    public long getShots(Message message) {
         try {
             StringBuilder JSONtext = new StringBuilder();
             Scanner scannerJSON = new Scanner(new FileReader(src));
@@ -110,7 +117,7 @@ public class Database {
         }
     }
 
-    public static void setBoxes(Message message, long newValue) {
+    public void setBoxes(Message message, long newValue) {
         try {
             StringBuilder JSONtext = new StringBuilder();
             Scanner scannerJSON = new Scanner(new FileReader(src));
@@ -133,7 +140,7 @@ public class Database {
         }
     }
 
-    public static void setLastUse(Message message, long newValue) {
+    public void setLastUse(Message message, long newValue) {
         try {
             StringBuilder JSONtext = new StringBuilder();
             Scanner scannerJSON = new Scanner(new FileReader(src));
@@ -156,7 +163,7 @@ public class Database {
         }
     }
 
-    public static void setShots(Message message, long newValue) {
+    public void setShots(Message message, long newValue) {
         try {
             StringBuilder JSONtext = new StringBuilder();
             Scanner scannerJSON = new Scanner(new FileReader(src));
@@ -179,7 +186,7 @@ public class Database {
         }
     }
 
-    public static void setKills(Message message, long newValue) {
+    public void setKills(Message message, long newValue) {
         try {
             StringBuilder JSONtext = new StringBuilder();
             Scanner scannerJSON = new Scanner(new FileReader(src));
@@ -202,7 +209,30 @@ public class Database {
         }
     }
 
-    public static boolean findUser(Message message) {
+    public void setKillsById(long iden, long newValue) {
+        try {
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
+            while(scannerJSON.hasNextLine()) {
+                JSONtext.append(scannerJSON.nextLine());
+            }
+            scannerJSON.close();
+            JSONObject usersJSON = new JSONObject(JSONtext.toString());
+            JSONObject userInfoJSON = usersJSON.getJSONObject(String.valueOf(iden));
+            userInfoJSON.put("lastUse",userInfoJSON.getLong("lastUse"));
+            userInfoJSON.put("shots",userInfoJSON.getLong("shots"));
+            userInfoJSON.put("kills",newValue);
+            userInfoJSON.put("boxes",userInfoJSON.getLong("boxes"));
+            usersJSON.put(String.valueOf(iden),userInfoJSON);
+            FileWriter writeFile = new FileWriter(src);
+            writeFile.write(usersJSON.toString());
+            writeFile.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean findUser(Message message) {
         try {
             StringBuilder JSONtext = new StringBuilder();
             Scanner scannerJSON = new Scanner(new FileReader(src));
@@ -218,7 +248,7 @@ public class Database {
         }
     }
 
-    public static String[] getTop(Message message) {
+    public String[] getTop(Message message) {
         String[] top = new String[10];
         try {
             StringBuilder JSONtext = new StringBuilder();
@@ -247,7 +277,7 @@ public class Database {
         return top;
     }
 
-    public static long getKillsByID(String userId) {
+    public long getKillsByID(String userId) {
         try {
             StringBuilder JSONtext = new StringBuilder();
             Scanner scannerJSON = new Scanner(new FileReader(src));
@@ -264,7 +294,7 @@ public class Database {
         }
     }
 
-    public static String getNicknameByID(String userId) {
+    public String getNicknameByID(String userId) {
         String nick = "Ім'я невідоме";
         try {
             StringBuilder JSONtext = new StringBuilder();
@@ -282,7 +312,7 @@ public class Database {
         return nick;
     }
 
-    public static String getNickname(Message message) {
+    public String getNickname(Message message) {
         String nick = "Ім'я невідоме";
         try {
             StringBuilder JSONtext = new StringBuilder();
@@ -301,7 +331,7 @@ public class Database {
         return nick;
     }
 
-    public static void setNewNickname(Message message, String resNick) {
+    public void setNewNickname(Message message, String resNick) {
         try {
             StringBuilder JSONtext = new StringBuilder();
             Scanner scannerJSON = new Scanner(new FileReader(src));
@@ -322,7 +352,7 @@ public class Database {
 
 
 
-    public static String[] getTopChat(Message message) {
+    public String[] getTopChat(Message message) {
         String[] top = new String[10];
         try {
             StringBuilder JSONtext = new StringBuilder();
@@ -332,13 +362,21 @@ public class Database {
             }
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
+            JSONObject tempUsersJSON = new JSONObject();
+            for (Iterator<String> key = usersJSON.keys(); key.hasNext();) {
+                String id = String.valueOf(key.next());
+                JSONObject name = (JSONObject) usersJSON.get(id);
+                boolean userInChat = checkChatUser(String.valueOf(message.getChatId()), Long.parseLong(id));
+                if (userInChat) {
+                    tempUsersJSON.put(id,name);
+                }
+            }
             for (int i = 0; i < top.length; i++) {
                 long currentKillsLoop = -1;
-                for (Iterator<String> key = usersJSON.keys(); key.hasNext();) {
+                for (Iterator<String> key = tempUsersJSON.keys(); key.hasNext();) {
                     String id = String.valueOf(key.next());
                     JSONObject name = (JSONObject) usersJSON.get(id);
-                    boolean userInChat = checkChatUser(String.valueOf(message.getChatId()),Long.parseLong(id));
-                    if(name.getLong("kills") > currentKillsLoop && userInChat) {
+                    if(name.getLong("kills") > currentKillsLoop) {
                         top[i] = id;
                         currentKillsLoop = name.getLong("kills");
                     }
@@ -347,21 +385,21 @@ public class Database {
                 user.put("kills",-1L);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         return top;
     }
 
-    private static boolean checkChatUser(String chatId, long userId) {
+    public boolean checkChatUser(String chatId, long userId) {
         try {
-            new GetChatMember(chatId, userId);
-            return true;
+            GetChatMember getMember = new GetChatMember(chatId, userId);
+            return chatMemberGetter.GetChatMember(getMember);
         } catch (Exception e) {
             return false;
         }
     }
 
-    public static void printData() {
+    public void printData() {
         try {
             StringBuilder JSONtext = new StringBuilder();
             Scanner scannerJSON = new Scanner(new FileReader(src));
@@ -375,7 +413,7 @@ public class Database {
         }
     }
 
-    public static void changeExplicit(Message message) {
+    public void changeExplicit(Message message) {
         try {
             StringBuilder JSONtext = new StringBuilder();
             Scanner scannerJSON = new Scanner(new FileReader(src));
@@ -385,12 +423,30 @@ public class Database {
             scannerJSON.close();
             JSONObject usersJSON = new JSONObject(JSONtext.toString());
             JSONObject user = (JSONObject) usersJSON.get(String.valueOf(message.getFrom().getId()));
+            boolean e = !user.getBoolean("explicit");
+            user.put("explicit",e);
+            FileWriter writeFile = new FileWriter(src);
+            writeFile.write(usersJSON.toString());
+            writeFile.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static boolean getExplicit(Message message) {
-        return true;
+    public boolean getExplicit(Message message) {
+        try {
+            StringBuilder JSONtext = new StringBuilder();
+            Scanner scannerJSON = new Scanner(new FileReader(src));
+            while(scannerJSON.hasNextLine()) {
+                JSONtext.append(scannerJSON.nextLine());
+            }
+            scannerJSON.close();
+            JSONObject usersJSON = new JSONObject(JSONtext.toString());
+            JSONObject user = (JSONObject) usersJSON.get(String.valueOf(message.getFrom().getId()));
+            return user.getBoolean("explicit");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
